@@ -37,6 +37,7 @@ import os
 import uvicorn
 import traceback
 import tensorflow as tf
+import tensorflow_recommenders as tfrs
 
 from pydantic import BaseModel
 from urllib.request import Request
@@ -50,7 +51,8 @@ from utils import load_image_into_numpy_array
 # If you use h5 type uncomment line below
 # model = tf.keras.models.load_model('./my_model.h5')
 # If you use saved model type uncomment line below
-# model = tf.saved_model.load("./my_model_folder")
+path = "/Users/rsoedarnadi/Documents/GitHub/machine-learning/tfrs-model"
+model = tf.saved_model.load(path)
 
 app = FastAPI()
 
@@ -76,38 +78,10 @@ def predict_text(req: RequestText, response: Response):
         
         # Step 3: Predict the data
         # result = model.predict(...)
+        scores, results = model([text])
         
         # Step 4: Change the result your determined API output
-        
-        return "Endpoint not implemented"
-    except Exception as e:
-        traceback.print_exc()
-        response.status_code = 500
-        return "Internal Server Error"
-
-# If your model need image input use this endpoint!
-@app.post("/predict_image")
-def predict_image(uploaded_file: UploadFile, response: Response):
-    try:
-        # Checking if it's an image
-        if uploaded_file.content_type not in ["image/jpeg", "image/png"]:
-            response.status_code = 400
-            return "File is Not an Image"
-        
-        # In here you will get a numpy array in "image" variable.
-        # You can use this file, to load and do processing
-        # later down the line
-        image = load_image_into_numpy_array(uploaded_file.file.read())
-        print("Image shape:", image.shape)
-        
-        # Step 1: (Optional, but you should have one) Do your image preprocessing
-        
-        # Step 2: Prepare your data to your model
-        
-        # Step 3: Predict the data
-        # result = model.predict(...)
-        
-        # Step 4: Change the result your determined API output
+        print(f"Recommendations: {results[0][:3]}")
         
         return "Endpoint not implemented"
     except Exception as e:
