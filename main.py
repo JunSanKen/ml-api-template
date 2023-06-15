@@ -51,7 +51,7 @@ from utils import load_image_into_numpy_array
 # If you use h5 type uncomment line below
 # model = tf.keras.models.load_model('./my_model.h5')
 # If you use saved model type uncomment line below
-path = "/Users/rsoedarnadi/Documents/GitHub/machine-learning/tfrs-model"
+path = "tfrs-model"
 model = tf.saved_model.load(path)
 
 app = FastAPI()
